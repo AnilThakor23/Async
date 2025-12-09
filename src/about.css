@@ -1,6 +1,6 @@
 @font-face {
     font-family: FF;
-    src: url("./aften_screen.woff");
+    src: url("/aften_screen.woff");
   }
   * {
       box-sizing: border-box;
