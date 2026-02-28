@@ -9,6 +9,7 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
       integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <link rel="stylesheet" href="/src/css/about.css">
 </head>
 
 <body data-barba="wrapper" class="relative overflow-x-hidden bg-[#DADADA]">
@@ -23,15 +24,21 @@
 
    <div data-barba="container" data-barba-namespace="about"
       class="main  z-[10] bg-[#DADADA] relative  text-black px-[2vw]">
-      <div class="part1 fixed top-0 left-0 flex flex-col justify-between h-[100vh] py-[3vh] w-fit px-[2vw]">
-         <div class="leading-none uppercase text-[4vw] font-bold">
-            <p class="homeLink cursor-pointer">Home <i class="ri-arrow-right-up-line"></i></p>
-            <p class="worksLink cursor-pointer">works <i class="ri-arrow-right-up-line"></i></p>
+      <div class="part1 fixed top-0 left-0 flex flex-col justify-between h-[100vh] py-[3vh] w-fit px-[2vw] text-white">
+         <div class="leading-none uppercase text-[4vw] font-bold flex flex-col gap-[0.5vh]">
+            <div class="homeLink cursor-pointer w-fit px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
+              <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
+              <p class=" leading-none font-semibold text-[1vw]">  Home  </p>
+             </div>
+             <div class="worksLink cursor-pointer w-fit px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
+               <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
+               <p class=" leading-none font-semibold text-[1vw]">  works  </p>
+             </div>
          </div>
-         <img class=" h-[38vh] w-fit" src="/myimg2.jpg" alt="">
+         <img class=" h-[38vh] w-fit" src="%BASE_URL%images/myimg2.jpg" alt="">
       </div>
 
-      <div class="part2 flex justify-end py-[4vh]">
+      <div class="part2 flex justify-end py-[2vh]">
          <div class="w-[65vw] leading-[1.2]  tracking-tighter text-justify flex flex-col gap-[2vh]">
             <p class=" text-[2.5vw] uppercase font-bold">I’m Anil Thakor, a frontend developer from India — obsessed
                with building animated, story-driven, and visually immersive websites. I love turning ideas into
@@ -57,7 +64,7 @@
 
 
 
-   <script type="module" src="./src/about.js"></script>
+   <script type="module" src="/src/javascript/about.js"></script>
    <!-- <div class="transition absolute bg-black w-full h-full top-0"></div> -->
    <!-- <script type="module" src="src/barba.js"></script> -->
 </body>

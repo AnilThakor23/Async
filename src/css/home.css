@@ -1,6 +1,7 @@
 @font-face {
   font-family: FF;
-  src: url("/aften_screen.woff");
+  /* use root-relative path; Vite will prefix with base automatically */
+  src: url("/fonts/aften_screen.woff");
 }
 * {
     box-sizing: border-box;

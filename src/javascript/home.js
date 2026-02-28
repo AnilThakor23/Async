@@ -1,52 +1,42 @@
 import * as THREE from 'three';
-import "./home.css";
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla';
-import vertexShader from '../shaders/vertex.glsl';
-import textVertexShader from '../shaders/textVertex.glsl';
-// import textFragmentShader from '../shaders/textFragment.glsl';
+import vertexShader from '../../shaders/vertex.glsl';
+import textVertexShader from '../../shaders/textVertex.glsl';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Text } from 'troika-three-text';
 import { gsap } from "gsap";
 import blobs from './blobs.js';
+import CONFIG, { PATHS, VIDEO_CONFIG, EXTERNAL_RESOURCES, GESTURE_CONFIG, ROUTES } from '../../config.js';
+import '../css/home.css';
+
+// global error handlers to catch runtime issues in production
+window.addEventListener('error', (e) => {
+  console.error('Global error:', e.message, 'at', e.filename + ':' + e.lineno);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Unhandled promise rejection:', e.reason);
+});
 
 
 
+let FontSize_3DText = window.innerWidth / 5800;
+
+if (window.innerWidth > 1500) FontSize_3DText = window.innerWidth/6000
+else if (window.innerWidth < 1400 && window.innerWidth > 1000 ) FontSize_3DText = window.innerWidth / 5800
+else if (window.innerWidth < 1000 && window.innerWidth > 500 ) FontSize_3DText = window.innerWidth / 5800
+else if (window.innerWidth < 500 ) FontSize_3DText = window.innerWidth / 5900
 
 
 
-const config = {
-  video: { width: 640, height: 480, fps: 30 },
-};
 let handPosition = { x: 0, y: 0 };
 let curruntGesture = 'none';
 let videoWidth, videoHeight, drawingContext, canvas, gestureEstimator;
 let model;
 
-const gestureStrings = {
-  thumbs_up: '👍',
-  victory: '✌🏻',
-  thumbs_down: '👎',
-  hello: '👋',
-  close: "✊",
-};
-
-const fingerLookupIndices = {
-  thumb: [0, 1, 2, 3, 4],
-  indexFinger: [0, 5, 6, 7, 8],
-  middleFinger: [0, 9, 10, 11, 12],
-  ringFinger: [0, 13, 14, 15, 16],
-  pinky: [0, 17, 18, 19, 20],
-};
-
-const landmarkColors = {
-  thumb: 'red',
-  indexFinger: 'blue',
-  middleFinger: 'yellow',
-  ringFinger: 'green',
-  pinky: 'pink',
-  palmBase: 'white',
-};
+const gestureStrings = GESTURE_CONFIG.strings;
+const fingerLookupIndices = GESTURE_CONFIG.fingerLookupIndices;
+const landmarkColors = GESTURE_CONFIG.landmarkColors;
 
 
 // Create the scene
@@ -72,7 +62,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1;
-renderer.outputEncoding = THREE.sRGBEncoding;
+// renderer.outputEncoding = THREE.sRGBEncoding;
 
 const uniforms = {
   uTime: { value: 0 },
@@ -90,7 +80,7 @@ const uniforms = {
 const material = new CustomShaderMaterial({
   baseMaterial: THREE.MeshPhysicalMaterial,
   vertexShader,
-  map: textureLoader.load(`./gradients/${blobs[0].config.map}`),
+  map: textureLoader.load(CONFIG.getAssetUrl(blobs[0].config.map, 'gradients')),
   metalness: blobs[currentIndex].config.metalness,
   roughness: blobs[currentIndex].config.roughness,
   envMapIntensity: blobs[currentIndex].config.envMapIntensity,
@@ -110,7 +100,7 @@ scene.add(sphere);
 
 camera.position.z = 3;
 
-rgbeLoader.load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr', function (texture) {
+rgbeLoader.load(EXTERNAL_RESOURCES.HDRI, function (texture) {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.environment = texture;
 });
@@ -141,7 +131,8 @@ scene.add(textGroup);
 const texts = blobs.map((blob, index) => {
   const myText = new Text();
   myText.text = blob.name;
-  myText.font = `./aften_screen.woff`;
+  // font asset is in the fonts folder; use the PATHS.FONTS entry so the base path is applied correctly
+  myText.font = PATHS.FONTS + 'aften_screen.woff';
   myText.anchorX = 'center';
   myText.anchorY = 'middle';
   myText.material = textMaterial;
@@ -149,13 +140,8 @@ const texts = blobs.map((blob, index) => {
 
   if (index !== 0) myText.scale.set(0, 0, 2);
   myText.letterSpacing = -0.08;
-  myText.fontSize = window.innerWidth / 4000;
-  if (window.innerWidth < 500) {
-    myText.fontSize = window.innerWidth / 4200;
-  }
-  else if (window.innerWidth < 1000) {
-    myText.fontSize = window.innerWidth / 5500;
-  }
+  myText.fontSize = Math.min(FontSize_3DText ,  0.3);
+  
   myText.glyphGeometryDetail = 20;
   myText.sync();
   textGroup.add(myText); // Add text to the group
@@ -207,27 +193,18 @@ function TransitionAnime(e) {
     ease: 'power2.inOut',
   })
 
-  // const bg = new THREE.Color(blobs[next].background);
-  // gsap.to(scene.background, {
-  //   r: bg.r,
-  //   g: bg.g,
-  //   b: bg.b,
-  //   duration: 1,
-  //   ease: 'linear',
-  // })
-
   updateBlob(blobs[next].config);
 }
 window.addEventListener('wheel', (e) => {
   TransitionAnime(e);
 })
-document.querySelector(".mobileTransition .rightBtn").addEventListener("click", () => {
+document.querySelector(".mobileTransition .rightBtn")?.addEventListener("click", () => {
   let A235 = {
     deltaY: 1
   }
   TransitionAnime(A235);
 })
-document.querySelector(".mobileTransition .leftBtn").addEventListener("click", () => {
+document.querySelector(".mobileTransition .leftBtn")?.addEventListener("click", () => {
   let A236 = {
     deltaY: -1
   }
@@ -242,7 +219,7 @@ function updateBlob(config) {
   if (config.uSmallWaveTimeFrequency !== undefined) gsap.to(material.uniforms.uSmallWaveTimeFrequency, { value: config.uSmallWaveTimeFrequency, duration: 1, ease: 'power2.inOut' });
   if (config.map !== undefined) {
     setTimeout(() => {
-      material.map = textureLoader.load(`./gradients/${config.map}`);
+      material.map = textureLoader.load(CONFIG.getAssetUrl(config.map, 'gradients'));
     }, 400);
   }
   if (config.roughness !== undefined) gsap.to(material, { roughness: config.roughness, duration: 1, ease: 'power2.inOut' });
@@ -426,9 +403,9 @@ async function loadWebcam(width, height, fps) {
 
 async function loadVideo() {
   const video = await loadWebcam(
-    config.video.width,
-    config.video.height,
-    config.video.fps
+    VIDEO_CONFIG.width,
+    VIDEO_CONFIG.height,
+    VIDEO_CONFIG.fps
   );
   video.play();
   return video;
@@ -456,8 +433,8 @@ async function continuouslyDetectLandmarks(video) {
       const result = predictions[0].landmarks;
       drawKeypoints(result, predictions[0].annotations);
       const center = getHandCenter(predictions[0].landmarks);
-      handPosition.x = (1 - (center.x / config.video.width)) * 2 - 1; // Normalize to [-1, 1]
-      handPosition.y = (1 - (center.y / config.video.height)) * 2 - 1; // Normalize to [-1, 1]   
+      handPosition.x = (1 - (center.x / VIDEO_CONFIG.width)) * 2 - 1; // Normalize to [-1, 1]
+      handPosition.y = (1 - (center.y / VIDEO_CONFIG.height)) * 2 - 1; // Normalize to [-1, 1]   
 
       if (!isAnimating && curruntGesture !== "close") {
         gsap.to(sphere.rotation, {
@@ -545,8 +522,7 @@ let isRunning = false;
 function CheckGesture() {
   let loop = setTimeout(() => {
 
-    // console.log(curruntGesture);
-    // console.log(isAnimating);
+
     if (curruntGesture == "close" && !isRunning) {
       isRunning = true;
       TransitionAnime({ deltaY: 100 });
@@ -563,7 +539,7 @@ CheckGesture();
 
 
 
-document.querySelector(".page footer .cameraBtn").addEventListener("mouseenter", () => {
+document.querySelector(".page footer .cameraBtn")?.addEventListener("mouseenter", () => {
   gsap.to(".page footer .cameraBtn", {
     backgroundColor: " white ",
     color: "black",
@@ -574,7 +550,7 @@ document.querySelector(".page footer .cameraBtn").addEventListener("mouseenter",
 
   })
 })
-document.querySelector(".page footer .cameraBtn").addEventListener("mouseleave", () => {
+document.querySelector(".page footer .cameraBtn")?.addEventListener("mouseleave", () => {
   gsap.to(".page footer .cameraBtn", {
     backgroundColor: " black ",
     color: "white",
@@ -585,16 +561,16 @@ document.querySelector(".page footer .cameraBtn").addEventListener("mouseleave",
 
   })
 })
-document.querySelector(".page footer .cameraBtn").addEventListener("click", () => {
+document.querySelector(".page footer .cameraBtn")?.addEventListener("click", () => {
   main()
 })
 
-document.querySelector(".howtoUseHand .cut").addEventListener("click", () => {
+document.querySelector(".howtoUseHand .cut")?.addEventListener("click", () => {
   gsap.to(".howtoUseHand", { opacity: 0, onComplete: () => { document.querySelector(".howtoUseHand").style.display = "none" } })
 })
 
 
-document.querySelector(".worksLink").addEventListener("click", () => {
+document.querySelector(".worksLink")?.addEventListener("click", () => {
   // document.querySelector(".Transition").style.diplay ="flex"
   gsap.fromTo(".Transition div", {
     height: "0%"
@@ -604,12 +580,12 @@ document.querySelector(".worksLink").addEventListener("click", () => {
     duration: 1.5,
     onComplete: () => {
       // gsap.set(".Transition div",{height:"100%"})
-      window.location.href = "/works";
+      window.location.href = ROUTES.WORKS;
     }
 
   })
 })
-document.querySelector(".aboutLink").addEventListener("click", () => {
+document.querySelector(".aboutLink")?.addEventListener("click", () => {
   // document.querySelector(".Transition").style.diplay ="flex"
   gsap.fromTo(".Transition div", {
     height: "0%"
@@ -619,7 +595,7 @@ document.querySelector(".aboutLink").addEventListener("click", () => {
     duration: 1.5,
     onComplete: () => {
       // gsap.set(".Transition div",{height:"100%"})
-      window.location.href = "/about";
+      window.location.href = ROUTES.ABOUT;
     }
 
   })

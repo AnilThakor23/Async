@@ -1,7 +1,8 @@
 import gsap from "gsap";
 import * as THREE from "three";
 import { works, vertexShader, fragmentShader } from "./worksData";
-import "./works.css"
+import CONFIG, { PATHS, ROUTES } from "../../config.js";
+import "../css/works.css"
 
 
 
@@ -25,7 +26,7 @@ document.querySelector(".homeLink").addEventListener("click", () => {
         height: "100%",
         stagger: 0.12,
         duration: 1.5,
-        onComplete: () => { window.location.href = "/"; }
+        onComplete: () => { window.location.href = ROUTES.HOME; }
 
     })
 })
@@ -39,7 +40,7 @@ document.querySelector(".aboutLink").addEventListener("click", () => {
         duration: 1.5,
         onComplete: () => {
             // gsap.set(".Transition div",{height:"100%"})
-            window.location.href = "/about";
+            window.location.href = ROUTES.ABOUT;
         }
 
     })
@@ -49,7 +50,7 @@ window.addEventListener("mousemove", (dets) => {
     gsap.to(".cursor", {
         left: dets.x,
         top: dets.y,
-        duration: 0.1
+        duration: 0.2
     })
 })
 
@@ -184,8 +185,9 @@ const startDrag = (x, y) => {
     isDragging = true;
     isClick = true;
     clickStartTime = Date.now();
-    document.querySelector(".cursor p").textContent = "Draging"
-    document.body.classList.add("dragging");
+    // document.querySelector(".cursor p").textContent = "Draging"
+    // document.body.classList.add("dragging");
+    gsap.to(".cursor ", { height: "10px", width: "10px", duration: 0.2 });
     previousMouse.x = x;
     previousMouse.y = y;
     targetZoom = config.zoomlevel;
@@ -211,8 +213,9 @@ const onPointerDown = (e) => startDrag(e.clientX, e.clientY);
 const onPointerMove = (e) => handleMove(e.clientX, e.clientY);
 const onPointerUp = (event) => {
     isDragging = false;
-    document.querySelector(".cursor p").textContent = "Drag"
-    document.body.classList.remove("dragging");
+    // document.querySelector(".cursor p").textContent = "Drag"
+    // document.body.classList.remove("dragging");
+    gsap.to(".cursor ", { height: "20px", width: "20px", duration: 0.2 });
     targetZoom = 1.0;
     if (isClick && Date.now() - clickStartTime < 200) {
         const endX = event.clientX || event.changedTouches?.[0]?.clientX;
@@ -231,9 +234,9 @@ const onPointerUp = (event) => {
             const cellY = Math.floor(worldY / config.cellSize);
             const texIndex = Math.floor((cellX + cellY * 3.0) % works.length);
             const actualIndex = texIndex < 0 ? works.length + texIndex : texIndex;
-            if (works[actualIndex]?.href) {
-                window.location.href = works[actualIndex].href;
-            }
+            // if (works[actualIndex]?.href) {
+            //     window.location.href = works[actualIndex].href;
+            // }
         }
     }
 };
@@ -433,7 +436,6 @@ async function initWork() {
             });
         });
     }
-    console.log("work Start");
 }
 
 
