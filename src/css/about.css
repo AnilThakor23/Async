@@ -1,6 +1,6 @@
 @font-face {
     font-family: FF;
-    /* root-relative path ensures prefixing by Vite's base option */
+    /* use root-relative path; Vite will rewrite with base URL */
     src: url("/fonts/aften_screen.woff");
   }
   * {

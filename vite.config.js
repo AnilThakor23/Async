@@ -1,20 +1,18 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
 import glsl from 'vite-plugin-glsl';
 
 export default defineConfig(({ mode }) => {
   const basePath = mode === 'production' ? '/Async/' : '/';
  
   return {
-    root: '.',
     plugins: [glsl()],
     base: basePath,
     build: {
       rollupOptions: {
         input: {
-          index: resolve(__dirname, 'index.html'),
-          works: resolve(__dirname, 'works.html'),
-          about: resolve(__dirname, 'about.html'),
+          index: 'index.html',
+          works: 'works.html',
+          about: 'about.html',
         },
         output: {
           manualChunks(id) {
