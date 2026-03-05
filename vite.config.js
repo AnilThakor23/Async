@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 
 export default defineConfig(({ mode }) => {
-  const basePath = mode === 'production' ? '/Async/' : '/';
+  const basePath =  '/Async/'
  
   return {
     plugins: [glsl()],
