@@ -1,7 +1,8 @@
+@import "tailwindcss";
 @font-face {
   font-family: FF;
   /* use root-relative path; Vite will rewrite with base URL */
-  src: url("/src/assets/fonts/aften_screen.woff");
+  src: url("/fonts/aften_screen.woff");
 }
 * {
     box-sizing: border-box;

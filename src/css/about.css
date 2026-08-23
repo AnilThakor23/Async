@@ -1,3 +1,4 @@
+@import "tailwindcss";
 @font-face {
     font-family: FF;
     /* use root-relative path; Vite will rewrite with base URL */

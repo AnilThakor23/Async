@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anil Thakor</title>
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
     integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -17,8 +16,6 @@
   <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@3.7.0/dist/tf-backend-webgl.js"></script>
 
   <script src="https://unpkg.com/@tensorflow-models/handpose@0.0.7/dist/handpose.js"></script>
-
-
 
 </head>
 
@@ -65,34 +62,40 @@
     <canvas id="canvas"></canvas>
     <div class="page  z-[10] h-[100svh] w-full flex flex-col justify-between  absolute top-0 left-0 px-[2vw] py-[2vh]">
       <nav class="flex relative justify-between text-[1.2vw] ">
-        <div class="intro flex">
+        <div class="intro flex flex-col">
+          <div class="">
+             <img class=" h-[10vh] w-fit" src="/images/myimg2.JPG" alt="">
+          </div>
           <div class="flex gap-[10px]">
             <div class="leading-none">
-              <h1 class="name flex items-center leading-none mt-2">
+              <h1 class="name flex items-center leading-none mt-2 gap-[5px]">
                 <p>Anil</p>
                 <p>Thakor</p>
-                <p >®</p>
               </h1>
               
             </div>
           </div>
         </div>
-        <div class="part2 flex absolute left-[17vw] gap-[5vw] uppercase mr-[10vw] mt-1 text-white">
-          <div class="worksLink cursor-pointer px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
-           <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
-           <p class=" leading-none font-semibold text-[1vw]">  works  </p>
+        <div class="part2 flex absolute left-[15vw] gap-[1vw] uppercase mr-[10vw]  text-white">
+          <div class="cursor-pointer px-[20px] py-[12px] bg-[#171616a2] rounded-full flex justify-center items-center gap-3"> 
+            <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
+            <p class=" leading-none font-semibold text-[1vw]">  <span>Home</span>  </p>
           </div>
-          <div class="aboutLink cursor-pointer px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
-           <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
-           <p class=" leading-none font-semibold text-[1vw]">  about  </p>
+          <div class="worksLink cursor-pointer px-[20px] py-[12px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
+            <p class=" leading-none font-semibold text-[1vw]">  <span>works</span> <i class="ri-arrow-right-up-line"></i> </p>
+            <!-- <p class="h-[10px] w-[10px] bg-white rounded-full"></p> -->
+          </div>
+          <div class="aboutLink cursor-pointer px-[20px] py-[12px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
+           <p class=" leading-none font-semibold text-[1vw]">  <span>about Me</span> <i class="ri-arrow-right-up-line"></i> </p>
           </div>
         </div>
         <div class="part3 flex gap-[1vw] capitalize text-[1.1vw]">
-          <a href="https://www.instagram.com/_._.anil_21._._/" target="_blank" class="cursor-pointer">[instagram]</a>
+          <a href="https://www.instagram.com/_._.anil_21._._/" target="_blank" class="cursor-pointer">[ instagram ]</a>
           <a href="https://www.linkedin.com/in/anil-thakor-830b242b2/" target="_blank"
-            class="cursor-pointer">[Linkedin]</a>
-          <a href=" https://github.com/AnilThakor23" target="_blank" class="cursor-pointer">[Github]</a>
+            class="cursor-pointer">[ Linkedin ]</a>
+          <a href=" https://github.com/AnilThakor23" target="_blank" class="cursor-pointer">[ Github ]</a>
         </div>
+        
       </nav>
 
       <footer class="flex relative justify-between items-end w-[100%]">

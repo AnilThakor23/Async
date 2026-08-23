@@ -18,20 +18,16 @@ gsap.fromTo(".Transition div", {
 })
 
 
-document.querySelector(".homeLink").addEventListener("click", () => {
-    // document.querySelector(".Transition").style.diplay ="flex"
-    gsap.fromTo(".Transition div", {
-        height: "0%"
-    }, {
-        height: "100%",
-        stagger: 0.12,
-        duration: 1.5,
-        onComplete: () => { window.location.href = ROUTES.HOME; }
+function destroyScene() {
+    if (animationId) cancelAnimationFrame(animationId);
+    removeEventListeners();
+    if (renderer) {
+        renderer.dispose();
+        renderer.domElement.remove();
+    }
+}
 
-    })
-})
-document.querySelector(".aboutLink").addEventListener("click", () => {
-    // document.querySelector(".Transition").style.diplay ="flex"
+document.querySelector(".homeLink").addEventListener("click", () => {
     gsap.fromTo(".Transition div", {
         height: "0%"
     }, {
@@ -39,10 +35,22 @@ document.querySelector(".aboutLink").addEventListener("click", () => {
         stagger: 0.12,
         duration: 1.5,
         onComplete: () => {
-            // gsap.set(".Transition div",{height:"100%"})
+            destroyScene();
+            window.location.href = ROUTES.HOME;
+        }
+    })
+})
+document.querySelector(".aboutLink").addEventListener("click", () => {
+    gsap.fromTo(".Transition div", {
+        height: "0%"
+    }, {
+        height: "100%",
+        stagger: 0.12,
+        duration: 1.5,
+        onComplete: () => {
+            destroyScene();
             window.location.href = ROUTES.ABOUT;
         }
-
     })
 })
 
@@ -260,9 +268,24 @@ const onWindowResize = () => {
     plane?.material.uniforms.uResolution.value.set(width, height);
 };
 
+const onWindowMouseMove = (dets) => {
+    let x = (dets.x / window.innerWidth) * 2 - 1;
+    let y = (dets.y / window.innerHeight) * 2 - 1;
+    if (!isDragging) {
+        targetOffset.x = -x * 0.1 + lastOffset.x;
+        targetOffset.y = y * 0.1 + lastOffset.y;
+    }
+};
+
+const onRendererMouseLeave = () => {
+    mousePosition.x = mousePosition.y = -1;
+    plane?.material.uniforms.uMousePos.value.set(-1, -1);
+};
+
 function setupEventListeners() {
     let gallery = document.querySelector("#gallery");
     if (!gallery) return;
+
     gallery.addEventListener("mousedown", onPointerDown);
     gallery.addEventListener("mousemove", onPointerMove);
     gallery.addEventListener("mouseup", onPointerUp);
@@ -271,22 +294,12 @@ function setupEventListeners() {
     gallery.addEventListener("touchmove", onTouchMove, { passive: false });
     gallery.addEventListener("touchend", onPointerUp, { passive: false });
     window.addEventListener("resize", onWindowResize);
+    window.addEventListener("mousemove", onWindowMouseMove);
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     renderer.domElement.addEventListener("mousemove", updateMousePosition);
-    window.addEventListener("mousemove", (dets) => {
-        let x = (dets.x / window.innerWidth) * 2 - 1;
-        let y = (dets.y / window.innerHeight) * 2 - 1;
-        if (!isDragging) {
-            targetOffset.x = -x * 0.1 + lastOffset.x;
-            targetOffset.y = y * 0.1 + lastOffset.y;
-        }
-    });
-    renderer.domElement.addEventListener("mouseleave", () => {
-        mousePosition.x = mousePosition.y = -1;
-        plane?.material.uniforms.uMousePos.value.set(-1, -1);
-    });
+    renderer.domElement.addEventListener("mouseleave", onRendererMouseLeave);
 
-    // Store listeners for cleanup
+    // Store the same references for proper cleanup
     eventListeners = [
         { el: gallery, type: "mousedown", fn: onPointerDown },
         { el: gallery, type: "mousemove", fn: onPointerMove },
@@ -296,24 +309,9 @@ function setupEventListeners() {
         { el: gallery, type: "touchmove", fn: onTouchMove },
         { el: gallery, type: "touchend", fn: onPointerUp },
         { el: window, type: "resize", fn: onWindowResize },
-        { el: document, type: "contextmenu", fn: (e) => e.preventDefault() },
+        { el: window, type: "mousemove", fn: onWindowMouseMove },
         { el: renderer.domElement, type: "mousemove", fn: updateMousePosition },
-        {
-            el: window, type: "mousemove", fn: (dets) => {
-                let x = (dets.x / window.innerWidth) * 2 - 1;
-                let y = (dets.y / window.innerHeight) * 2 - 1;
-                if (!isDragging) {
-                    targetOffset.x = -x * 0.1 + lastOffset.x;
-                    targetOffset.y = y * 0.1 + lastOffset.y;
-                }
-            }
-        },
-        {
-            el: renderer.domElement, type: "mouseleave", fn: () => {
-                mousePosition.x = mousePosition.y = -1;
-                plane?.material.uniforms.uMousePos.value.set(-1, -1);
-            }
-        },
+        { el: renderer.domElement, type: "mouseleave", fn: onRendererMouseLeave },
     ];
 }
 

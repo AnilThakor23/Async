@@ -70,7 +70,7 @@ export const ROUTES = {
 
 // External resources
 export const EXTERNAL_RESOURCES = {
-  HDRI: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr',
+  HDRI: '/studio_small_08_1k.hdr',
   TAILWIND: 'https://unpkg.com/@tailwindcss/browser@4',
   REMIXICON: 'https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css',
   FINGERPOSE: 'https://cdn.jsdelivr.net/npm/fingerpose@0.1.0/dist/fingerpose.min.js',

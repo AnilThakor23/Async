@@ -177,6 +177,7 @@ function TransitionAnime(e) {
     ease: 'power2.inOut',
   })
 
+
   gsap.to(sphere.rotation, {
     y: sphere.rotation.y + Math.PI * 1 * -direction,
     duration: 1,
@@ -251,11 +252,19 @@ document.querySelector("body").addEventListener("mousemove", function (dets) {
     duration: 1
   });
 
-  // gsap.to(sphere.rotation, {
-  //   y: SphereRotation.y + gsap.utils.mapRange(0, window.innerWidth, -Math.PI * 0.5, Math.PI * 0.5, dets.clientX), // Maps the mouse X position from the window width to a range of -Math.PI * 0.1 to Math.PI * 0.1
-  //   x: SphereRotation.x +  gsap.utils.mapRange(0, window.innerHeight, -Math.PI * 0.5, Math.PI * 0.5, dets.clientY), // Maps the mouse Y position from the window height to a range of -Math.PI * 0.1 to Math.PI * 0.1
-  //   duration : 1 
-  // })
+  
+  let x = (dets.x/window.innerWidth * 2 ) - 1 
+  let y = (dets.y/window.innerHeight * 2 ) - 1 
+  
+  gsap.to(sphere.rotation, {
+    y: SphereRotation.y - x*0.3, // Maps the mouse X position from the window width to a range of -Math.PI * 0.1 to Math.PI * 0.1
+    x: SphereRotation.x + y*0.5 , // Maps the mouse Y position from the window height to a range of -Math.PI * 0.1 to Math.PI * 0.1
+    duration : 1 
+  })
+  gsap.to(sphere.position,{
+    x: -x*0.1
+  })
+  
 });
 
 
@@ -501,6 +510,7 @@ async function main() {
   drawingContext.scale(-1, 1);
 
   continuouslyDetectLandmarks(video);
+  startGestureLoop();
 }
 
 // main();
@@ -519,23 +529,30 @@ function getHandCenter(landmarks) {
 }
 
 let isRunning = false;
+let gestureLoopActive = false;
+let gestureLoopId = null;
+
 function CheckGesture() {
-  let loop = setTimeout(() => {
-
-
+  if (!gestureLoopActive) return;
+  gestureLoopId = setTimeout(() => {
     if (curruntGesture == "close" && !isRunning) {
       isRunning = true;
       TransitionAnime({ deltaY: 100 });
-      setTimeout(() => {
-        isRunning = false;
-      }, 1200)
+      setTimeout(() => { isRunning = false; }, 1200);
     }
-
-
     CheckGesture();
   }, 100);
 }
-CheckGesture();
+
+function startGestureLoop() {
+  gestureLoopActive = true;
+  CheckGesture();
+}
+
+function stopGestureLoop() {
+  gestureLoopActive = false;
+  if (gestureLoopId) clearTimeout(gestureLoopId);
+}
 
 
 
@@ -562,11 +579,17 @@ document.querySelector(".page footer .cameraBtn")?.addEventListener("mouseleave"
   })
 })
 document.querySelector(".page footer .cameraBtn")?.addEventListener("click", () => {
-  main()
+  if (typeof fp === 'undefined' || typeof handpose === 'undefined') {
+    document.querySelector("footer .p2").textContent = "Still loading gesture library, please try again in a moment.";
+    gsap.to("footer .p2", { opacity: 1 });
+    return;
+  }
+  main();
 })
 
 document.querySelector(".howtoUseHand .cut")?.addEventListener("click", () => {
-  gsap.to(".howtoUseHand", { opacity: 0, onComplete: () => { document.querySelector(".howtoUseHand").style.display = "none" } })
+  stopGestureLoop();
+  gsap.to(".howtoUseHand", { opacity: 0, onComplete: () => { document.querySelector(".howtoUseHand").style.display = "none" } });
 })
 
 
@@ -609,13 +632,12 @@ document.querySelector(".aboutLink")?.addEventListener("click", () => {
 const EXPIRY_TIME = 6 * 60 * 60 * 1000; // 6 hour
 const lastVisit = localStorage.getItem("lastVisit");
 
-if (!lastVisit || (Date.now() - lastVisit) > EXPIRY_TIME) {
+if (!lastVisit || (Date.now() - parseInt(lastVisit, 10)) > EXPIRY_TIME) {
   localStorage.setItem("lastVisit", Date.now());
   let t = 4;
   gsap.to(".LoadingPage .line", { width: "100vw", delay: 0.5, duration: t })
   gsap.to(".LoadingPage .text", {
     opacity: 1,
-    delay: 0.5,
     delay: t / 4,
     stagger: t / 5,
     onComplete: () => {

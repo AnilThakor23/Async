@@ -5,11 +5,10 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Anil Thakor | About</title>
-   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
       integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
-   <link rel="stylesheet" href="src/css/about.css">
+   <link rel="stylesheet" href="/src/css/about.css">
 </head>
 
 <body data-barba="wrapper" class="relative overflow-x-hidden bg-[#DADADA]">
@@ -24,18 +23,38 @@
 
    <div data-barba="container" data-barba-namespace="about"
       class="main  z-[10] bg-[#DADADA] relative  text-black px-[2vw]">
-      <div class="part1 fixed top-0 left-0 flex flex-col justify-between h-[100vh] py-[3vh] w-fit px-[2vw] text-white">
-         <div class="leading-none uppercase text-[4vw] font-bold flex flex-col gap-[0.5vh]">
-            <div class="homeLink cursor-pointer w-fit px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
+      <div class="part1  fixed top-0 left-0 flex flex-col justify-between h-[100vh] py-[3vh] w-fit px-[2vw] text-white">
+         
+            <!-- <div class="homeLink cursor-pointer w-fit px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
               <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
               <p class=" leading-none font-semibold text-[1vw]">  Home  </p>
              </div>
              <div class="worksLink cursor-pointer w-fit px-[15px] py-[8px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3"> 
                <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
                <p class=" leading-none font-semibold text-[1vw]">  works  </p>
-             </div>
-         </div>
-         <img class=" h-[38vh] w-fit" src="/images/myimg2.jpg" alt="">
+             </div> -->
+
+            <div class="flex left-[1vw] gap-[1vw] uppercase mr-[10vw]  text-white">
+               <div
+                  class="cursor-pointer px-[20px] py-[12px] bg-[#171616a2] rounded-full flex justify-center items-center gap-3">
+                  <p class="h-[10px] w-[10px] bg-white rounded-full"></p>
+                  <p class=" leading-none font-semibold text-[1vw]"> <span>About</span> </p>
+               </div>
+               <div
+                  class="homeLink cursor-pointer px-[20px] py-[12px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3">
+                  <p class=" leading-none font-semibold text-[1vw]"> <span>Home</span> <i
+                        class="ri-arrow-right-up-line"></i> </p>
+                  <!-- <p class="h-[10px] w-[10px] bg-white rounded-full"></p> -->
+               </div>
+               <div
+                  class="worksLink cursor-pointer px-[20px] py-[12px] bg-[#171616f5] rounded-full flex justify-center items-center gap-3">
+                  <p class=" leading-none font-semibold text-[1vw]"> <span>works</span> <i
+                        class="ri-arrow-right-up-line"></i> </p>
+               </div>
+            </div>
+
+         
+         <img class=" h-[38vh] w-fit" src="/images/myimg2.JPG" alt="">
       </div>
 
       <div class="part2 flex justify-end py-[2vh]">
@@ -64,7 +83,7 @@
 
 
 
-   <script type="module" src="src/javascript/about.js"></script>
+   <script type="module" src="/src/javascript/about.js"></script>
    <!-- <div class="transition absolute bg-black w-full h-full top-0"></div> -->
    <!-- <script type="module" src="src/barba.js"></script> -->
 </body>
